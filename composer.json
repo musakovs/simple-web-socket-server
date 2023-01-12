@@ -1,0 +1,19 @@
+{
+  "require": {
+    "musakovs/oop-starter-pack": "master@dev",
+    "ext-sockets": "*",
+    "ext-json": "*",
+    "ext-mbstring": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Musakov\\WebSocketServer\\": "src/"
+    }
+  },
+  "repositories": {
+    "musakovs/oop-starter-pack": {
+      "type": "vcs",
+      "url": "https://github.com/musakovs/oop-starter-pack"
+    }
+  }
+}
