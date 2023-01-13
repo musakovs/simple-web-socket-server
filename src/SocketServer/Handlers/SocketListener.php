@@ -45,7 +45,7 @@ class SocketListener implements RunInterface
         
         $newSocketArray = $this->socket->select($this->socketArray);
 
-        if ($this->socketArray->contains($this->socket)) {
+        if ($newSocketArray->contains($this->socket)) {
             $this->newConnectionHandler->handle($newSocketArray);
         }
         

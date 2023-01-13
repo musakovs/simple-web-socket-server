@@ -4,7 +4,7 @@ namespace Musakov\WebSocketServer\SocketServer;
 
 use Musakov\WebSocketServer\SocketServer\Interfaces\SocketInterface;
 
-class SocketArray implements \Iterator
+class SocketArray implements \Iterator, \Countable
 {
     /**
      * @var SocketInterface[]
@@ -16,6 +16,11 @@ class SocketArray implements \Iterator
     public function __construct(array $sockets)
     {
         $this->sockets = $sockets;
+    }
+    
+    public function count(): int
+    {
+        return count($this->sockets);
     }
     
     public function replace(array $sockets)

@@ -36,15 +36,22 @@ class Socket implements SocketInterface
 
     public function select(SocketArray $socketArray): SocketArray
     {
-        $newSocketArray = $socketArray->map(function(SocketInterface $socket) {
-            return $socket->socket();
+        $existingSocketArray = $socketArray->map(function(SocketInterface $socket) {
+            return $socket;
         });
+        $existingClean = $newSocketArray = array_map(function(SocketInterface $socket) {
+            return $socket->socket();
+        }, $existingSocketArray);
 
         socket_select($newSocketArray, $null, $null, 0, 10);
         
-        return new SocketArray(array_map(function($socket) {
-            return new Socket($socket);
-        }, $newSocketArray));
+        $new = new SocketArray([]);
+        foreach ($existingClean as $k => $item) {
+            if (in_array($item, $newSocketArray)) {
+                $new->add($existingSocketArray[$k]);
+            }
+        }
+        return $new;
     }
 
     public function accept(): SocketInterface
