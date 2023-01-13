@@ -47,7 +47,6 @@ class NewConnectionsHandler implements SocketMessageHandlerInterface
 
         $header = $newSocket->read(1024);
         $this->handshake->do($header, $newSocket);
-        l('handshake');
         
         $this->newConnectionPublisher->publish($newSocket);
 

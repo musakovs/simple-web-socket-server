@@ -49,12 +49,10 @@ class ExistingConnectionHandler implements Handler
         }
         
         if ($socket->recv(1024) >= 1) {
-            l('message');
             $this->messagePublisher->publish($socket);
 
             $this->shouldStop = true;
         } else {
-            l('disconnect');
             $socketData = $socket->read(1024, PHP_NORMAL_READ);
             if (is_null($socketData)) {
                 $this->disconnectPublisher->publish($socket);
