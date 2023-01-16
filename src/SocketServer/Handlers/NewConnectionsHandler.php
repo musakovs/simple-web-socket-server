@@ -2,7 +2,7 @@
 
 namespace Musakov\WebSocketServer\SocketServer\Handlers;
 
-use Musakov\WebSocketServer\SocketServer\Helpers\Handshake;
+use Musakov\WebSocketServer\SocketServer\Interfaces\HandshakeInterface;
 use Musakov\WebSocketServer\SocketServer\Interfaces\PublishInterface;
 use Musakov\WebSocketServer\SocketServer\Interfaces\SocketInterface;
 use Musakov\WebSocketServer\SocketServer\Interfaces\SocketMessageHandlerInterface;
@@ -15,7 +15,7 @@ class NewConnectionsHandler implements SocketMessageHandlerInterface
      */
     private $socket;
     /**
-     * @var Handshake
+     * @var HandshakeInterface 
      */
     private $handshake;
     /**
@@ -29,7 +29,7 @@ class NewConnectionsHandler implements SocketMessageHandlerInterface
 
     public function __construct(
         SocketInterface $socket,
-        Handshake $handshake,
+        HandshakeInterface $handshake,
         PublishInterface $newConnectionPublisher,
         SocketArray $socketArray
     )
@@ -44,9 +44,8 @@ class NewConnectionsHandler implements SocketMessageHandlerInterface
     {
         $newSocket = $this->socket->accept();
         $this->socketArray->add($newSocket);
-
-        $header = $newSocket->read(1024);
-        $this->handshake->do($header, $newSocket);
+        
+        $this->handshake->do($newSocket);
         
         $this->newConnectionPublisher->publish($newSocket);
 

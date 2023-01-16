@@ -2,10 +2,11 @@
 
 namespace Musakov\WebSocketServer\SocketServer\Helpers;
 
+use Musakov\WebSocketServer\SocketServer\Interfaces\HandshakeInterface;
 use Musakov\WebSocketServer\SocketServer\Interfaces\SocketInterface;
 use Musakov\WebSocketServer\SocketServer\ServerAddress;
 
-class Handshake
+class Handshake implements HandshakeInterface
 {
     /**
      * @var ServerAddress
@@ -17,8 +18,9 @@ class Handshake
         $this->serverAddress = $serverAddress;
     }
 
-    public function do(?string $header, SocketInterface $newSocket)
+    public function do(SocketInterface $socket)
     {
+        $header  = $socket->read(1024);
         $headers = [];
         $lines = preg_split("/\r\n/", $header ?: '');
         foreach ($lines as $line) {
@@ -36,7 +38,7 @@ class Handshake
             "WebSocket-Origin: {$this->serverAddress->host()}\r\n" .
             "WebSocket-Location: ws://{$this->serverAddress->host()}:{$this->serverAddress->port()}\r\n" .
             "Sec-WebSocket-Accept:$secAccept\r\n\r\n";
-        
-        $newSocket->write($buffer);
+
+        $socket->write($buffer);
     }
 }
